@@ -23,6 +23,55 @@ Color Command is a high-performance cognitive training application built with **
   - **Trap Mode**: Advanced cognitive traps (Word/Ink matches).
 - **Global Feel**: Professional navy-blue aesthetic with "On Fire" streak systems.
 
+## 📊 Architecture & Diagrams
+
+### User Flow
+```mermaid
+graph TD
+    A[Splash Screen] --> B[Home Screen]
+    B --> C[Settings]
+    B --> D[Game Loop]
+    C --> B
+    D --> E{Time Left?}
+    E -- No --> F[Game Over]
+    E -- Yes --> D
+    F --> G[Interstitial Ad]
+    G --> H[Retry]
+    G --> I[Home]
+    H --> D
+    I --> B
+```
+
+### Data Model (State Relationship)
+```mermaid
+erDiagram
+    USER ||--o{ GAME_SESSION : plays
+    USER {
+        int bestScore
+        string rank
+    }
+    GAME_SESSION {
+        int currentScore
+        int streak
+        float timeLeft
+        string activeMode
+    }
+    SETTINGS {
+        boolean soundEnabled
+        boolean hapticsEnabled
+        string theme
+    }
+    GAME_SESSION ||--|| SETTINGS : uses
+```
+
+## 🚀 Tech Stack
+- **Framework**: React Native (Expo SDK 54)
+- **Styling**: Vanilla Stylesheet with dynamic theme tokens
+- **Animations**: React Native Reanimated & LayoutAnimations
+- **Audio**: Expo-AV (High-quality haptic & sound feedback)
+- **Icons**: Lucide React Native
+- **Ads**: Google Mobile Ads (AdMob)
+
 ## 📦 Deployment
 
 ### Android (Play Store)

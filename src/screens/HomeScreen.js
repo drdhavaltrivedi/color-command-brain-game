@@ -21,7 +21,7 @@ export default function HomeScreen({ bestScore, onPlay, onSettings }) {
       </View>
 
       <View style={styles.hero}>
-        <Image source={require('../assets/images/logo.png')} style={styles.logo} />
+        <Image source={require('../../assets/logo.png')} style={styles.logo} />
         <View style={styles.titleContainer}>
           <Text style={styles.titlePrefix}>Color</Text>
           <Text style={styles.titleSuffix}>Command</Text>

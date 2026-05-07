@@ -78,7 +78,10 @@ export default function App() {
           <GameOverScreen
             score={score}
             bestScore={bestScore}
-            onRetry={() => setScreen('game')}
+            onRetry={() => {
+              showInterstitial();
+              setScreen('game');
+            }}
             onHome={() => setScreen('home')}
           />
         );

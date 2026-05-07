@@ -107,31 +107,29 @@ erDiagram
 - **Sounds**: (Optional) Integrated via `expo-av`.
 - **Icons**: Vector-based Lucide icons.
 
-## Build Management
+## New Features
+- **Ads on Retry**: Interstitial ads now appear when retrying after a Game Over.
+- **Improved Sound System**: Enhanced audio feedback for correct and wrong answers.
+- **Optimized Assets**: All icons and logos are now high-quality PNGs for better Play Store compliance.
+
+## Build & Submission (Play Store)
 
 To automatically increment the build number for Android and iOS, run:
 ```bash
 npm run bump-build
 ```
-This will update `versionCode` (Android) and `buildNumber` (iOS) in `app.json`.
 
-## APK Build
+### 1. APK for Testing (Preview)
+To create an APK for internal testing:
+```bash
+eas build -p android --profile preview
+```
 
-To create an Android APK for testing:
-
-1. Install EAS CLI:
-   ```bash
-   npm install -g eas-cli
-   ```
-2. Log in to your Expo account:
-   ```bash
-   eas login
-   ```
-3. Run the build command:
-   ```bash
-   eas build -p android --profile preview
-   ```
-4. Once the build is finished, you can download the APK from the link provided in the terminal.
+### 2. AAB for Play Store (Production)
+To create an Android App Bundle (AAB) for submission to the Google Play Store:
+```bash
+eas build -p android --profile production
+```
 
 ## AdMob Verification (app-ads.txt)
 

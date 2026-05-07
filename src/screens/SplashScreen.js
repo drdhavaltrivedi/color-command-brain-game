@@ -28,7 +28,7 @@ export default function SplashScreen({ onDone }) {
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.content, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
-        <Image source={require('../assets/images/logo.png')} style={styles.logo} />
+        <Image source={require('../../assets/logo.png')} style={styles.logo} />
         <Text style={styles.title}>Color Command</Text>
         <Text style={styles.subtitle}>REFLEX · STROOP · FOCUS</Text>
       </Animated.View>

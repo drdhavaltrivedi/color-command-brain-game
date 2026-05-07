@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.brilworks.color-command",
-      "buildNumber": "3",
+      "buildNumber": "5",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
@@ -29,7 +29,7 @@
         "backgroundColor": "#0F172A"
       },
       "package": "com.brilworks.colorcommand",
-      "versionCode": 5,
+      "versionCode": 7,
       "permissions": [
         "RECEIVE_BOOT_COMPLETED",
         "VIBRATE",

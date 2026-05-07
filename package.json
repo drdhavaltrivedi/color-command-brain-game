@@ -8,7 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build-web": "expo export --platform web",
-    "bump-build": "node increment-build.js"
+    "bump-build": "node increment-build.js",
+    "build:ios": "npm run bump-build && eas build -p ios --profile production",
+    "build:android": "npm run bump-build && eas build -p android --profile production"
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",

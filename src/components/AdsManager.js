@@ -1,58 +1,42 @@
-// src/components/AdsManager.js
+// src/components/AdsManager.js (Web Mock)
 import React from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
-import { BannerAd, BannerAdSize, TestIds, InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
+import { View, Text, StyleSheet } from 'react-native';
 
-// Test IDs - Replace with your own in production
-const BANNER_ID = Platform.select({
-  android: TestIds.BANNER,
-  ios: TestIds.BANNER,
-});
-
-const INTERSTITIAL_ID = Platform.select({
-  android: TestIds.INTERSTITIAL,
-  ios: TestIds.INTERSTITIAL,
-});
+// This file is used for Web builds where react-native-google-mobile-ads is not supported.
 
 export const AppBannerAd = () => {
   return (
-    <View style={styles.bannerContainer}>
-      <BannerAd
-        unitId={BANNER_ID}
-        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        requestOptions={{
-          requestNonPersonalizedAdsOnly: true,
-        }}
-      />
+    <View style={styles.bannerPlaceholder}>
+      <Text style={styles.placeholderText}>[ Advertisement ]</Text>
     </View>
   );
 };
 
-let interstitial = null;
-
 export const loadInterstitial = () => {
-  interstitial = InterstitialAd.createForAdRequest(INTERSTITIAL_ID, {
-    requestNonPersonalizedAdsOnly: true,
-  });
-  
-  interstitial.load();
+  console.log('AdMob Interstitial: Not supported on Web');
 };
 
 export const showInterstitial = () => {
-  if (interstitial && interstitial.loaded) {
-    interstitial.show();
-    loadInterstitial(); // Preload next one
-  } else {
-    loadInterstitial();
-  }
+  console.log('AdMob Interstitial: Not supported on Web');
 };
 
 const styles = StyleSheet.create({
-  bannerContainer: {
+  bannerPlaceholder: {
+    height: 60,
+    width: '100%',
+    backgroundColor: 'rgba(255,255,255,0.05)',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
-    paddingVertical: 10,
-    backgroundColor: 'transparent',
+    borderRadius: 8,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+    borderStyle: 'dashed',
+  },
+  placeholderText: {
+    color: 'rgba(255,255,255,0.3)',
+    fontSize: 12,
+    fontWeight: 'bold',
+    letterSpacing: 2,
   },
 });

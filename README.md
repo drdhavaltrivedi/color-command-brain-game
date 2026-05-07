@@ -1,146 +1,70 @@
 # Color Command: Brain Training & Reflex Game
 
-A high-performance, reflex-based "Stroop Effect" game built with React Native and Expo. Challenge your brain to ignore the ink color and tap what the word actually says.
+<p align="center">
+  <img src="assets/logo.png" width="128" height="128" alt="Color Command Logo" />
+</p>
 
-![Color Command Logo](./src/assets/images/logo.png)
+Color Command is a high-performance cognitive training application built with **React Native** and **Expo**. It utilizes the "Stroop Effect" to enhance neural plasticity, focus, and mental processing speed.
 
-## Features
+## 🚀 Tech Stack
+- **Framework**: React Native (Expo SDK 54)
+- **Styling**: Vanilla Stylesheet with dynamic theme tokens
+- **Animations**: React Native Reanimated & LayoutAnimations
+- **Audio**: Expo-AV (High-quality haptic & sound feedback)
+- **Icons**: Lucide React Native
+- **Ads**: Google Mobile Ads (AdMob)
 
-- **Stroop Effect Mechanics**: Training your brain to focus on semantic meaning over visual cues.
-- **Dynamic Difficulty**: The timer gets faster as your score increases.
-- **Streak System**: Build combos to get bonus points and "on fire" status.
-- **Cross-Platform**: Works seamlessly on iOS and Android.
-- **Premium UI**: Sleek dark mode design with vibrant color palettes and smooth animations.
-- **Haptic Feedback**: Physical response for correct/wrong taps (device dependent).
-- **Responsive Design**: Adapts perfectly to all screen sizes, from small phones to large tablets.
-- **Monetization**: Integrated Google AdMob for banner and interstitial ads.
+## 🎮 Game Features
+- **Cognitive Training**: Scientifically-backed mechanics to improve inhibitory control.
+- **Dynamic Difficulty**: Real-time timer scaling that adapts to your performance.
+- **Three Challenge Modes**:
+  - **Standard**: Match the word text.
+  - **Reverse**: Match the ink color.
+  - **Trap Mode**: Advanced cognitive traps (Word/Ink matches).
+- **Global Feel**: Professional navy-blue aesthetic with "On Fire" streak systems.
 
-## Architecture & Logic
+## 📦 Deployment
 
-### User Flow
-```mermaid
-graph TD
-    A[Splash Screen] -->|Auto| B[Home Screen]
-    B -->|Settings| C[Settings Screen]
-    C -->|Back| B
-    B -->|Play| D[Game Screen]
-    D -->|Pause| E[Pause Overlay]
-    E -->|Resume| D
-    E -->|Quit| B
-    D -->|Game Over| F[Game Over Screen]
-    F -->|Retry| D
-    F -->|Home| B
-```
-
-### Entity Relationship (ER) Diagram
-```mermaid
-erDiagram
-    APP_STATE ||--|| SETTINGS : manages
-    APP_STATE ||--|| GAME_SESSION : tracks
-    GAME_SESSION ||--o| USER_STATS : updates
-    
-    SETTINGS {
-        boolean soundOn
-        boolean hapticsOn
-        string difficulty
-        boolean reverseMode
-    }
-    
-    GAME_SESSION {
-        int currentScore
-        int currentStreak
-        float timeLeft
-        string currentRoundId
-    }
-    
-    USER_STATS {
-        int bestScore
-        string rank
-        int gamesPlayed
-    }
-```
-
-## Tech Stack
-
-- **Framework**: [Expo](https://expo.dev/) / React Native
-- **Icons**: [Lucide React Native](https://lucide.dev/)
-- **Haptics**: `expo-haptics`
-- **Animations**: `Animated` API (React Native)
-- **Safe Area**: `react-native-safe-area-context`
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v18 or newer)
-- npm or yarn
-- Expo Go app on your phone (for testing)
-
-### Installation
-
-1. Navigate to the project directory:
-   ```bash
-   cd color-command-rn
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npx expo start
-   ```
-
-4. Scan the QR code with your camera (iOS) or Expo Go app (Android) to play on your device.
-
-## Game Modes
-
-- **Standard**: Tap the color that matches the word's text.
-- **Reverse Mode**: Tap the color that matches the ink color (Enable in Settings).
-- **Trap Mode**: After score 15, the ink and word may match to trick you.
-
-## Assets
-
-- **Logo**: Custom generated professional minimalist logo.
-- **Sounds**: (Optional) Integrated via `expo-av`.
-- **Icons**: Vector-based Lucide icons.
-
-## New Features
-- **Ads on Retry**: Interstitial ads now appear when retrying after a Game Over.
-- **Improved Sound System**: Enhanced audio feedback for correct and wrong answers.
-- **Optimized Assets**: All icons and logos are now high-quality PNGs for better Play Store compliance.
-- **Privacy First**: Explicitly disabled microphone and audio recording permissions to comply with Play Store policies.
-
-## Build & Submission (Play Store)
-
-To automatically increment the build number for Android and iOS, run:
+### Android (Play Store)
+To generate an Android App Bundle (AAB):
 ```bash
 npm run bump-build
-```
-
-### 1. APK for Testing (Preview)
-To create an APK for internal testing:
-```bash
-eas build -p android --profile preview
-```
-
-### 2. AAB for Play Store (Production)
-To create an Android App Bundle (AAB) for submission to the Google Play Store:
-```bash
 eas build -p android --profile production
 ```
 
-## AdMob Verification (app-ads.txt)
+### Web (Vercel)
+The web version is optimized for Vercel deployment.
+1. Export the web project:
+   ```bash
+   npm run build-web
+   ```
+2. Deploy the `dist` folder to Vercel:
+   ```bash
+   vercel deploy ./dist
+   ```
 
-To safeguard your ad earnings and fight fraud, you must host the `app-ads.txt` file on your developer website:
+## 🛠 Setup & Development
 
-1.  Copy the `app-ads.txt` file from the root of this project.
-2.  Upload it to the root of your developer website (e.g., `https://brilworks.com/app-ads.txt`).
-3.  Ensure your website URL is correctly listed in the Google Play Console and Apple App Store Connect.
-4.  Wait 24-48 hours for AdMob to crawl and verify the file.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start development server:
+   ```bash
+   npx expo start
+   ```
+3. Test on different platforms:
+   - Press `a` for Android
+   - Press `i` for iOS
+   - Press `w` for Web
 
-## License
+## 🔒 Privacy & Safety
+- **No Data Collection**: All scores are stored locally via device persistence.
+- **Restricted Permissions**: Explicitly disabled microphone and recording permissions for user safety.
+- **AdMob Integration**: Follows Google Play's Family Policy for ad content.
 
+## 📄 Legal
+The `website/` folder contains the official landing page, Privacy Policy, and Terms of Service. These must be hosted on your developer domain for Play Store verification and AdMob `app-ads.txt` compliance.
+
+---
 MIT © Brilworks 2026

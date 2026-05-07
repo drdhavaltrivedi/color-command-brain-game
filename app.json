@@ -23,7 +23,7 @@
         "backgroundColor": "#0F172A"
       },
       "package": "com.brilworks.colorcommand",
-      "versionCode": 4,
+      "versionCode": 5,
       "permissions": [
         "RECEIVE_BOOT_COMPLETED",
         "VIBRATE"
@@ -37,8 +37,8 @@
       [
         "react-native-google-mobile-ads",
         {
-          "androidAppId": "ca-app-pub-3940256099942544~3347511713",
-          "iosAppId": "ca-app-pub-3940256099942544~1458002511"
+          "androidAppId": "ca-app-pub-7068210205141615~3216844408",
+          "iosAppId": "ca-app-pub-7068210205141615~3216844408"
         }
       ],
       [

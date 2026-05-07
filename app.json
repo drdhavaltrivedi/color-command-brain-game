@@ -40,8 +40,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "color-command-reflex-game"
+        "projectId": "51b9db91-3848-44c0-a9f1-8878efa346dc"
       }
-    }
+    },
+    "owner": "dhaval29"
   }
 }

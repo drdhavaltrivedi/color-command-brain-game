@@ -111,6 +111,7 @@ erDiagram
 - **Ads on Retry**: Interstitial ads now appear when retrying after a Game Over.
 - **Improved Sound System**: Enhanced audio feedback for correct and wrong answers.
 - **Optimized Assets**: All icons and logos are now high-quality PNGs for better Play Store compliance.
+- **Privacy First**: Explicitly disabled microphone and audio recording permissions to comply with Play Store policies.
 
 ## Build & Submission (Play Store)
 

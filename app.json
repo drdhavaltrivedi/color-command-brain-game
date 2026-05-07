@@ -23,7 +23,11 @@
         "backgroundColor": "#0F172A"
       },
       "package": "com.brilworks.colorcommand",
-      "versionCode": 2,
+      "versionCode": 4,
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ],
       "edgeToEdgeEnabled": true
     },
     "web": {
@@ -35,6 +39,12 @@
         {
           "androidAppId": "ca-app-pub-3940256099942544~3347511713",
           "iosAppId": "ca-app-pub-3940256099942544~1458002511"
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": false
         }
       ]
     ],

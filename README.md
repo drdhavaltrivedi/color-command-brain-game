@@ -74,23 +74,28 @@ erDiagram
 
 ## 📦 Deployment
 
-### Android (Play Store)
-To generate an Android App Bundle (AAB):
+### Automated Builds (Recommended)
+We use a custom auto-incrementing script to ensure every build has a unique version number, preventing Store submission errors.
+
+**For iOS (App Store):**
 ```bash
-npm run bump-build
-eas build -p android --profile production
+npm run build:ios
 ```
+
+**For Android (Play Store):**
+```bash
+npm run build:android
+```
+
+### Manual Build Steps
+1. Increment build numbers: `npm run bump-build`
+2. Android (AAB): `eas build -p android --profile production`
+3. iOS (IPA): `eas build -p ios --profile production`
 
 ### Web (Vercel)
 The web version is optimized for Vercel deployment.
-1. Export the web project:
-   ```bash
-   npm run build-web
-   ```
-2. Deploy the `dist` folder to Vercel:
-   ```bash
-   vercel deploy ./dist
-   ```
+1. Export the web project: `npm run build-web`
+2. Deploy the `dist` folder to Vercel: `vercel deploy ./dist`
 
 ## 🛠 Setup & Development
 

@@ -1,13 +1,21 @@
 // src/screens/SettingsScreen.js
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Switch, ScrollView } from 'react-native';
-import { ChevronLeft, Info } from 'lucide-react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Switch, ScrollView, Linking, Platform } from 'react-native';
+import { ChevronLeft, Info, Star } from 'lucide-react-native';
 import { CC_THEME, CC_PALETTE } from '../constants/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen({ settings, onUpdateSettings, onBack }) {
   const toggleSound = () => onUpdateSettings({ ...settings, sound: !settings.sound });
   const toggleHaptics = () => onUpdateSettings({ ...settings, haptics: !settings.haptics });
+
+  const handleRate = () => {
+    const link = Platform.select({
+      ios: 'https://apps.apple.com/in/app/color-command-brain-training/id6767218237',
+      android: 'https://play.google.com/store/apps/details?id=com.brilworks.colorcommand',
+    });
+    Linking.openURL(link);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,6 +62,13 @@ export default function SettingsScreen({ settings, onUpdateSettings, onBack }) {
             </View>
             <Info color={CC_THEME.textDim} size={20} />
           </View>
+          <TouchableOpacity style={styles.row} onPress={handleRate}>
+            <View>
+              <Text style={styles.rowLabel}>Rate the App</Text>
+              <Text style={styles.rowSub}>Support us with 5 stars!</Text>
+            </View>
+            <Star color={CC_PALETTE.YELLOW} size={20} />
+          </TouchableOpacity>
           <View style={[styles.row, styles.noBorder]}>
             <View>
               <Text style={styles.rowLabel}>Version</Text>

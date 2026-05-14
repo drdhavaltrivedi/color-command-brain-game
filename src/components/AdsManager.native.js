@@ -1,51 +1,74 @@
-// src/components/AdsManager.js
+// src/components/AdsManager.native.js
 import React from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
-import { BannerAd, BannerAdSize, TestIds, InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
+import { View, StyleSheet } from 'react-native';
+import mobileAds, { BannerAd, BannerAdSize, RewardedInterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
+import { AD_UNIT_IDS } from '../constants/ads';
 
-// Test IDs - Replace with your own in production
-const BANNER_ID = Platform.select({
-  android: TestIds.BANNER,
-  ios: TestIds.BANNER,
-});
-
-const INTERSTITIAL_ID = Platform.select({
-  android: TestIds.INTERSTITIAL,
-  ios: TestIds.INTERSTITIAL,
-});
+export const initializeAds = () => {
+  return mobileAds().initialize();
+};
 
 export const AppBannerAd = () => {
   return (
     <View style={styles.bannerContainer}>
       <BannerAd
-        unitId={BANNER_ID}
+        unitId={AD_UNIT_IDS.BANNER}
         size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,
+        }}
+        onAdLoaded={() => {
+          console.log('Banner ad loaded');
+        }}
+        onAdFailedToLoad={(error) => {
+          console.error('Banner ad failed to load: ', error);
         }}
       />
     </View>
   );
 };
 
-let interstitial = null;
+let rewardedInterstitial = null;
 
-export const loadInterstitial = () => {
-  interstitial = InterstitialAd.createForAdRequest(INTERSTITIAL_ID, {
+export const loadRewardedInterstitial = () => {
+  rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(AD_UNIT_IDS.REWARDED_INTERSTITIAL, {
     requestNonPersonalizedAdsOnly: true,
   });
   
-  interstitial.load();
+  rewardedInterstitial.addAdEventListener(AdEventType.LOADED, () => {
+    console.log('Rewarded Interstitial Ad Loaded');
+  });
+
+  rewardedInterstitial.addAdEventListener(AdEventType.CLOSED, () => {
+    console.log('Rewarded Interstitial Ad Closed');
+    loadRewardedInterstitial(); // Preload next one
+  });
+
+  rewardedInterstitial.load();
 };
 
-export const showInterstitial = () => {
-  if (interstitial && interstitial.loaded) {
-    interstitial.show();
-    loadInterstitial(); // Preload next one
+export const showRewardedInterstitial = (onAdFinished) => {
+  if (rewardedInterstitial && rewardedInterstitial.loaded) {
+    const subscription = rewardedInterstitial.addAdEventListener(AdEventType.CLOSED, () => {
+      subscription.remove();
+      if (onAdFinished) onAdFinished();
+    });
+    
+    rewardedInterstitial.show().catch(err => {
+      console.error('Error showing ad:', err);
+      subscription.remove();
+      if (onAdFinished) onAdFinished();
+    });
   } else {
-    loadInterstitial();
+    console.log('Rewarded Interstitial Ad not loaded yet');
+    loadRewardedInterstitial();
+    if (onAdFinished) onAdFinished(); // Fallback to continue flow
   }
 };
+
+// Legacy support for App.js if it was using InterstitialAd
+export const loadInterstitial = loadRewardedInterstitial;
+export const showInterstitial = showRewardedInterstitial;
 
 const styles = StyleSheet.create({
   bannerContainer: {

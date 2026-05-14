@@ -19,5 +19,16 @@ if (appJson.expo.ios && appJson.expo.ios.buildNumber) {
   appJson.expo.ios.buildNumber = "1";
 }
 
+// Increment semantic version (patch)
+if (appJson.expo.version) {
+  const parts = appJson.expo.version.split('.');
+  if (parts.length === 3) {
+    parts[2] = (parseInt(parts[2], 10) + 1).toString();
+    appJson.expo.version = parts.join('.');
+  }
+}
+
 fs.writeFileSync(appJsonPath, JSON.stringify(appJson, null, 2));
-console.log(`Build number incremented to: ${appJson.expo.android.versionCode}`);
+console.log(`Version bumped to: ${appJson.expo.version}`);
+console.log(`Android versionCode: ${appJson.expo.android?.versionCode}`);
+console.log(`iOS buildNumber: ${appJson.expo.ios?.buildNumber}`);

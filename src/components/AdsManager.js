@@ -4,6 +4,11 @@ import { View, Text, StyleSheet } from 'react-native';
 
 // This file is used for Web builds where react-native-google-mobile-ads is not supported.
 
+export const initializeAds = () => {
+  console.log('AdMob: Initialized (Web Mock)');
+  return Promise.resolve();
+};
+
 export const AppBannerAd = () => {
   return (
     <View style={styles.bannerPlaceholder}>
@@ -12,13 +17,18 @@ export const AppBannerAd = () => {
   );
 };
 
-export const loadInterstitial = () => {
-  console.log('AdMob Interstitial: Not supported on Web');
+export const loadRewardedInterstitial = () => {
+  console.log('AdMob Rewarded Interstitial: Not supported on Web');
 };
 
-export const showInterstitial = () => {
-  console.log('AdMob Interstitial: Not supported on Web');
+export const showRewardedInterstitial = (onAdFinished) => {
+  console.log('AdMob Rewarded Interstitial: Not supported on Web');
+  if (onAdFinished) onAdFinished();
 };
+
+// Legacy support
+export const loadInterstitial = loadRewardedInterstitial;
+export const showInterstitial = showRewardedInterstitial;
 
 const styles = StyleSheet.create({
   bannerPlaceholder: {

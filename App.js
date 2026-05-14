@@ -11,7 +11,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import GameScreen from './src/screens/GameScreen';
 import GameOverScreen from './src/screens/GameOverScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
-import { loadInterstitial, showInterstitial } from './src/components/AdsManager';
+import { initializeAds, loadRewardedInterstitial, showRewardedInterstitial } from './src/components/AdsManager';
 
 const TWEAK_DEFAULTS = {
   startTimer: 3.0,
@@ -29,9 +29,13 @@ export default function App() {
   const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
   const [settings, setSettings] = useState({ sound: true, haptics: true });
   const [gameCount, setGameCount] = useState(0);
+  const [adsInitialized, setAdsInitialized] = useState(false);
 
   useEffect(() => {
-    loadInterstitial();
+    initializeAds().then(() => {
+      setAdsInitialized(true);
+      loadRewardedInterstitial();
+    });
   }, []);
 
   const handleGameOver = (finalScore) => {
@@ -44,7 +48,7 @@ export default function App() {
     const newCount = gameCount + 1;
     setGameCount(newCount);
     if (newCount % 3 === 0) {
-      showInterstitial();
+      showRewardedInterstitial();
     }
 
     if (settings.haptics) {
@@ -79,8 +83,9 @@ export default function App() {
             score={score}
             bestScore={bestScore}
             onRetry={() => {
-              showInterstitial();
-              setScreen('game');
+              showRewardedInterstitial(() => {
+                setScreen('game');
+              });
             }}
             onHome={() => setScreen('home')}
           />

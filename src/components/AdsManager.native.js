@@ -22,7 +22,7 @@ export const AppBannerAd = () => {
     <View style={styles.bannerContainer}>
       <BannerAd
         unitId={AD_UNIT_IDS.BANNER}
-        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        size={BannerAdSize.BANNER}
         requestOptions={{ requestNonPersonalizedAdsOnly: true }}
         onAdLoaded={() => console.log('[AdMob] Banner loaded')}
         onAdFailedToLoad={(e) => console.warn('[AdMob] Banner failed:', e.message)}
@@ -32,69 +32,64 @@ export const AppBannerAd = () => {
 };
 
 // ─── Rewarded Interstitial ────────────────────────────────────────────────────
-// One single instance is kept alive. After it shows+closes, a new one is
-// pre-loaded automatically. Listeners are stored so they can be cleaned up.
 
 let rewardedAd = null;
-let loadedSub = null;
-let closedSub = null;
-let errorSub = null;
-
-const removeAllListeners = () => {
-  loadedSub?.remove();
-  closedSub?.remove();
-  errorSub?.remove();
-  loadedSub = null;
-  closedSub = null;
-  errorSub = null;
-};
+let isAdLoading = false;
 
 export const loadRewardedInterstitial = () => {
-  // Clean up previous instance and listeners first
-  removeAllListeners();
+  if (isAdLoading) return;
+  isAdLoading = true;
 
-  rewardedAd = RewardedInterstitialAd.createForAdRequest(
-    AD_UNIT_IDS.REWARDED_INTERSTITIAL,
-    { requestNonPersonalizedAdsOnly: true }
-  );
+  try {
+    rewardedAd = RewardedInterstitialAd.createForAdRequest(
+      AD_UNIT_IDS.REWARDED_INTERSTITIAL,
+      { requestNonPersonalizedAdsOnly: true }
+    );
 
-  loadedSub = rewardedAd.addAdEventListener(AdEventType.LOADED, () => {
-    console.log('[AdMob] Rewarded interstitial loaded');
-  });
+    rewardedAd.addAdEventListener(AdEventType.LOADED, () => {
+      console.log('[AdMob] Rewarded interstitial loaded');
+      isAdLoading = false;
+    });
 
-  errorSub = rewardedAd.addAdEventListener(AdEventType.ERROR, (e) => {
-    console.warn('[AdMob] Rewarded interstitial error:', e.message);
-  });
+    rewardedAd.addAdEventListener(AdEventType.ERROR, (e) => {
+      console.warn('[AdMob] Rewarded interstitial error:', e.message);
+      isAdLoading = false;
+    });
 
-  rewardedAd.load();
+    rewardedAd.load();
+  } catch (err) {
+    console.error('[AdMob] Failed to create rewarded interstitial:', err);
+    isAdLoading = false;
+  }
 };
 
 export const showRewardedInterstitial = (onAdFinished) => {
-  if (!rewardedAd || !rewardedAd.loaded) {
+  const finish = () => {
+    if (onAdFinished) {
+      onAdFinished();
+      onAdFinished = null; // Prevent double call
+    }
+  };
+
+  if (rewardedAd && rewardedAd.loaded) {
+    const subscription = rewardedAd.addAdEventListener(AdEventType.CLOSED, () => {
+      subscription.remove();
+      console.log('[AdMob] Rewarded interstitial closed');
+      loadRewardedInterstitial();
+      finish();
+    });
+    
+    rewardedAd.show().catch((err) => {
+      console.error('[AdMob] show() error:', err);
+      subscription.remove();
+      loadRewardedInterstitial();
+      finish();
+    });
+  } else {
     console.log('[AdMob] Rewarded interstitial not ready – skipping');
-    // Still preload for next time
     loadRewardedInterstitial();
-    // Invoke callback immediately so the game flow is never blocked
-    if (onAdFinished) onAdFinished();
-    return;
+    finish();
   }
-
-  // Listen for close ONCE, then preload the next ad
-  const onClose = rewardedAd.addAdEventListener(AdEventType.CLOSED, () => {
-    onClose.remove();
-    console.log('[AdMob] Rewarded interstitial closed');
-    // Preload next ad AFTER the current one is fully dismissed
-    loadRewardedInterstitial();
-    // Navigate / execute callback now that the ad is gone
-    if (onAdFinished) onAdFinished();
-  });
-
-  rewardedAd.show().catch((err) => {
-    console.error('[AdMob] show() error:', err);
-    onClose.remove();
-    loadRewardedInterstitial();
-    if (onAdFinished) onAdFinished();
-  });
 };
 
 // ─── Legacy aliases ───────────────────────────────────────────────────────────
@@ -107,6 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    minHeight: 60, // Ensure there's space for the banner
     paddingVertical: 10,
     backgroundColor: 'transparent',
   },

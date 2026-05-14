@@ -1,5 +1,5 @@
 // src/screens/GameOverScreen.js
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { RotateCcw, Home, Trophy, Zap } from 'lucide-react-native';
 import { CC_THEME, CC_PALETTE, alpha } from '../constants/theme';
@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppBannerAd } from '../components/AdsManager';
 
 export default function GameOverScreen({ score, bestScore, onRetry, onHome }) {
+  const [isRetrying, setIsRetrying] = useState(false);
   const isNewBest = score >= bestScore && score > 0;
   const accuracy = score > 0 ? Math.min(100, Math.round((score / (score + 1)) * 100)) : 0;
 
@@ -50,9 +51,17 @@ export default function GameOverScreen({ score, bestScore, onRetry, onHome }) {
       <AppBannerAd />
 
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.retryBtn} onPress={onRetry}>
+        <TouchableOpacity 
+          style={[styles.retryBtn, isRetrying && { opacity: 0.7 }]} 
+          onPress={() => {
+            if (isRetrying) return;
+            setIsRetrying(true);
+            onRetry();
+          }}
+          disabled={isRetrying}
+        >
           <RotateCcw color="#0F172A" size={20} />
-          <Text style={styles.retryBtnText}>RETRY</Text>
+          <Text style={styles.retryBtnText}>{isRetrying ? 'LOADING...' : 'RETRY'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.homeBtn} onPress={onHome}>

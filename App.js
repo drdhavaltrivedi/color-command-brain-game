@@ -32,10 +32,15 @@ export default function App() {
   const [adsInitialized, setAdsInitialized] = useState(false);
 
   useEffect(() => {
-    initializeAds().then(() => {
-      setAdsInitialized(true);
-      loadRewardedInterstitial();
-    });
+    initializeAds()
+      .then(() => {
+        setAdsInitialized(true);
+        loadRewardedInterstitial();
+      })
+      .catch((err) => {
+        console.error('AdMob initialization failed:', err);
+        setAdsInitialized(true); // Continue anyway
+      });
   }, []);
 
   const handleGameOver = (finalScore) => {

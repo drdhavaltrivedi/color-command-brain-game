@@ -43,10 +43,15 @@ export default function App() {
     if (finalScore > bestScore) {
       setBestScore(finalScore);
     }
-    setScreen('gameover');
-    
+
     const newCount = gameCount + 1;
     setGameCount(newCount);
+
+    // Navigate to game over screen first, then show ad on top
+    setScreen('gameover');
+
+    // Show rewarded interstitial every 3 games (fire-and-forget — no callback
+    // needed here since we are already on the gameover screen)
     if (newCount % 3 === 0) {
       showRewardedInterstitial();
     }

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Color Command: Brain Training & Reflex Game",
     "slug": "color-command-rn",
-    "version": "1.0.9",
+    "version": "1.0.11",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -15,10 +15,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.brilworks.color-command",
-      "buildNumber": "14",
+      "buildNumber": "16",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false,
-        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -27,7 +26,7 @@
         "backgroundColor": "#0F172A"
       },
       "package": "com.brilworks.colorcommand",
-      "versionCode": 16,
+      "versionCode": 18,
       "permissions": [
         "RECEIVE_BOOT_COMPLETED",
         "VIBRATE",

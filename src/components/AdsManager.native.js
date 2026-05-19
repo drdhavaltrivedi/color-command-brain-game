@@ -1,11 +1,12 @@
 // src/components/AdsManager.native.js
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import mobileAds, {
+  AdEventType,
   BannerAd,
   BannerAdSize,
+  RewardedAdEventType,
   RewardedInterstitialAd,
-  AdEventType,
 } from 'react-native-google-mobile-ads';
 import { AD_UNIT_IDS } from '../constants/ads';
 
@@ -18,14 +19,32 @@ export const initializeAds = () => {
 // ─── Banner Ad ────────────────────────────────────────────────────────────────
 
 export const AppBannerAd = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasFailed, setHasFailed] = useState(false);
+
   return (
     <View style={styles.bannerContainer}>
+      {!isLoaded && (
+        <View style={styles.bannerPlaceholder}>
+          <Text style={styles.placeholderText}>
+            {hasFailed ? 'Ad unavailable' : 'Loading ad...'}
+          </Text>
+        </View>
+      )}
       <BannerAd
         unitId={AD_UNIT_IDS.BANNER}
         size={BannerAdSize.BANNER}
         requestOptions={{ requestNonPersonalizedAdsOnly: true }}
-        onAdLoaded={() => console.log('[AdMob] Banner loaded')}
-        onAdFailedToLoad={(e) => console.warn('[AdMob] Banner failed:', e.message)}
+        onAdLoaded={() => {
+          setIsLoaded(true);
+          setHasFailed(false);
+          console.log('[AdMob] Banner loaded');
+        }}
+        onAdFailedToLoad={(e) => {
+          setIsLoaded(false);
+          setHasFailed(true);
+          console.warn('[AdMob] Banner failed:', e.message);
+        }}
       />
     </View>
   );
@@ -46,7 +65,7 @@ export const loadRewardedInterstitial = () => {
       { requestNonPersonalizedAdsOnly: true }
     );
 
-    rewardedAd.addAdEventListener(AdEventType.LOADED, () => {
+    rewardedAd.addAdEventListener(RewardedAdEventType.LOADED, () => {
       console.log('[AdMob] Rewarded interstitial loaded');
       isAdLoading = false;
     });
@@ -72,8 +91,8 @@ export const showRewardedInterstitial = (onAdFinished) => {
   };
 
   if (rewardedAd && rewardedAd.loaded) {
-    const subscription = rewardedAd.addAdEventListener(AdEventType.CLOSED, () => {
-      subscription.remove();
+    const unsubscribe = rewardedAd.addAdEventListener(AdEventType.CLOSED, () => {
+      if (typeof unsubscribe === 'function') unsubscribe();
       console.log('[AdMob] Rewarded interstitial closed');
       loadRewardedInterstitial();
       finish();
@@ -81,7 +100,7 @@ export const showRewardedInterstitial = (onAdFinished) => {
     
     rewardedAd.show().catch((err) => {
       console.error('[AdMob] show() error:', err);
-      subscription.remove();
+      if (typeof unsubscribe === 'function') unsubscribe();
       loadRewardedInterstitial();
       finish();
     });
@@ -105,5 +124,20 @@ const styles = StyleSheet.create({
     minHeight: 60, // Ensure there's space for the banner
     paddingVertical: 10,
     backgroundColor: 'transparent',
+    position: 'relative',
+  },
+  bannerPlaceholder: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.04)',
+  },
+  placeholderText: {
+    color: 'rgba(255,255,255,0.45)',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });
